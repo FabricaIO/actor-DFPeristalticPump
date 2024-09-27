@@ -56,7 +56,7 @@ class DFPeristalticPump : public Actor, public PeriodicTask {
 		void dose();
 		bool enableAuto(bool enabled);
 	public:
-		DFPeristalticPump(String ConfigFile = "DFPump.json");
+		DFPeristalticPump(int Pin, String ConfigFile = "DFPump.json");
 		bool begin();
 		std::tuple<bool, String> receiveAction(int action, String payload = "");
 		void runTask(long elapsed);

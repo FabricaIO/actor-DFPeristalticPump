@@ -1,8 +1,9 @@
 #include "DFPeristalticPump.h"
 
 /// @brief Creates a peristaltic pump object
+/// @param Pin The pin to use
 /// @param ConfigFile The file name to store settings in
-DFPeristalticPump::DFPeristalticPump(String ConfigFile) {
+DFPeristalticPump::DFPeristalticPump(int Pin, String ConfigFile) {
 	path = "/settings/sig/" + ConfigFile;
 	// Allow allocation of all timers
     ESP32PWM::allocateTimer(0);
@@ -25,7 +26,7 @@ bool DFPeristalticPump::begin() {
 	// Create settings directory if necessary
 	if (!checkConfig(path)) {
 		// Set defaults
-		result = setConfig(R"({"pumpSpeed": 180, "doseTime": 2000, "pin": 26, "threshold": 50, "autoParameter": "", "autoEnabled": false, "activeLow": true, "taskName": "AutoPump", "taskPeriod": 10000 })");
+		result = setConfig(R"({"pumpSpeed": 180, "doseTime": 2000, "pin":)" + String(current_config.pin) + R"(, "threshold": 50, "autoParameter": "", "autoEnabled": false, "activeLow": true, "taskName": "AutoPump", "taskPeriod": 10000})");
 	} else {
 		// Load settings
 		result = setConfig(Storage::readFile(path));
