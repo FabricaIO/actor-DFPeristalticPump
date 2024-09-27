@@ -12,7 +12,7 @@
 
 #pragma once
 #include <Arduino.h>
-#include <SignalReceiver.h>
+#include <Actor.h>
 #include <SensorManager.h>
 #include <Storage.h>
 #include <ArduinoJson.h>
@@ -20,7 +20,7 @@
 #include <PeriodicTask.h>
 
 /// @brief Allows for control of a peristaltic pump
-class DFPeristalticPump : public SignalReceiver, public PeriodicTask {
+class DFPeristalticPump : public Actor, public PeriodicTask {
 	private:
 		/// @brief Holds pump configuration
 		struct {
@@ -58,7 +58,7 @@ class DFPeristalticPump : public SignalReceiver, public PeriodicTask {
 	public:
 		DFPeristalticPump(String ConfigFile = "DFPump.json");
 		bool begin();
-		std::tuple<bool, String> receiveSignal(int signal, String payload = "");
+		std::tuple<bool, String> receiveAction(int action, String payload = "");
 		void runTask(long elapsed);
 		String getConfig();
 		bool setConfig(String config);

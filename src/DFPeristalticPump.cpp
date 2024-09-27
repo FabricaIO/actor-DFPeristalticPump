@@ -15,10 +15,10 @@ DFPeristalticPump::DFPeristalticPump(String ConfigFile) {
 /// @return True on success
 bool DFPeristalticPump::begin() {
 	// Set description
-	Description.signalQuantity = 1;
+	Description.actionQuantity = 1;
 	Description.type = "pump";
 	Description.name = "Peristaltic Pump";
-	Description.signals = {{"Dose", 0}};
+	Description.actions = {{"Dose", 0}};
 	Description.id = 3;
 	pump.setPeriodHertz(50);
 	bool result = false;
@@ -33,11 +33,11 @@ bool DFPeristalticPump::begin() {
 	return result;
 }
 
-/// @brief Receives a signal
-/// @param signal The signal to process (only option is 0 for get data)
+/// @brief Receives an action
+/// @param action The action to process (only option is 0 for get data)
 /// @param payload Not used
 /// @return A plaintext response with the data
-std::tuple<bool, String> DFPeristalticPump::receiveSignal(int signal, String payload) {
+std::tuple<bool, String> DFPeristalticPump::receiveAction(int action, String payload) {
 	dose();
 	return { true, R"({"success": true})" };
 }
