@@ -48,7 +48,7 @@ class DFPeristalticPump : public Actor, public PeriodicTask {
 		} current_config;
 
 		/// @brief Full path to config file
-		String path;
+		String config_path;
 		
 		/// @brief Servo object
 		Servo pump;

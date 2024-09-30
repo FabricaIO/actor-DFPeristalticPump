@@ -4,7 +4,7 @@
 /// @param Pin The pin to use
 /// @param ConfigFile The file name to store settings in
 DFPeristalticPump::DFPeristalticPump(int Pin, String ConfigFile) {
-	path = "/settings/sig/" + ConfigFile;
+	config_path = "/settings/sig/" + ConfigFile;
 	// Allow allocation of all timers
     ESP32PWM::allocateTimer(0);
 	ESP32PWM::allocateTimer(1);
@@ -24,12 +24,12 @@ bool DFPeristalticPump::begin() {
 	pump.setPeriodHertz(50);
 	bool result = false;
 	// Create settings directory if necessary
-	if (!checkConfig(path)) {
+	if (!checkConfig(config_path)) {
 		// Set defaults
 		result = setConfig(R"({"pumpSpeed": 180, "doseTime": 2000, "pin":)" + String(current_config.pin) + R"(, "threshold": 50, "autoParameter": "", "autoEnabled": false, "activeLow": true, "taskName": "AutoPump", "taskPeriod": 10000})");
 	} else {
 		// Load settings
-		result = setConfig(Storage::readFile(path));
+		result = setConfig(Storage::readFile(config_path));
 	}
 	return result;
 }
@@ -131,7 +131,7 @@ bool DFPeristalticPump::setConfig(String config) {
 	TaskDescription.taskPeriod = doc["taskPeriod"].as<long>();
 	pump.detach();
 	pump.attach(current_config.pin, 500, 2500);
-	if (!saveConfig(path, config)) {
+	if (!saveConfig(config_path, config)) {
 		return false;
 	}
 	return enableAuto(current_config.autoEnabled);
