@@ -17,11 +17,10 @@
 #include <Storage.h>
 #include <ArduinoJson.h>
 #include <ESP32Servo.h>
-#include <PeriodicTask.h>
 
 /// @brief Allows for control of a peristaltic pump
-class DFPeristalticPump : public Actor, public PeriodicTask {
-	private:
+class DFPeristalticPump : public Actor {
+	protected:
 		/// @brief Holds pump configuration
 		struct {
 			/// @brief Speed at which pump runs
@@ -32,18 +31,6 @@ class DFPeristalticPump : public Actor, public PeriodicTask {
 
 			/// @brief Pin for pump
 			int pin;
-
-		    /// @brief threshold below which to deliver a dose
-		    int threshold;
-			
-			/// @brief Name of the sensor to use for auto-triggering
-			String autoParameter;
-
-			/// @brief Whether to enable auto triggering or not
-			bool autoEnabled;
-
-			/// @brief Whether the pump should be active on the above the threshold (false) or below (true)
-			bool activeLow; 
 			
 		} current_config;
 
@@ -54,12 +41,10 @@ class DFPeristalticPump : public Actor, public PeriodicTask {
 		Servo pump;
 
 		void dose();
-		bool enableAuto(bool enabled);
 	public:
 		DFPeristalticPump(int Pin, String ConfigFile = "DFPump.json");
 		bool begin();
 		std::tuple<bool, String> receiveAction(int action, String payload = "");
-		void runTask(long elapsed);
 		String getConfig();
-		bool setConfig(String config);
+		bool setConfig(String config, bool save);
 };

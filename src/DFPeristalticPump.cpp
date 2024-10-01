@@ -5,6 +5,7 @@
 /// @param ConfigFile The file name to store settings in
 DFPeristalticPump::DFPeristalticPump(int Pin, String ConfigFile) {
 	config_path = "/settings/sig/" + ConfigFile;
+	current_config.pin = Pin;
 	// Allow allocation of all timers
     ESP32PWM::allocateTimer(0);
 	ESP32PWM::allocateTimer(1);
@@ -26,10 +27,10 @@ bool DFPeristalticPump::begin() {
 	// Create settings directory if necessary
 	if (!checkConfig(config_path)) {
 		// Set defaults
-		result = setConfig(R"({"pumpSpeed": 180, "doseTime": 2000, "pin":)" + String(current_config.pin) + R"(, "threshold": 50, "autoParameter": "", "autoEnabled": false, "activeLow": true, "taskName": "AutoPump", "taskPeriod": 10000})");
+		result = setConfig(R"({"pumpSpeed": 180, "doseTime": 2000, "pin":)" + String(current_config.pin) + "}", true);
 	} else {
 		// Load settings
-		result = setConfig(Storage::readFile(config_path));
+		result = setConfig(Storage::readFile(config_path), false);
 	}
 	return result;
 }
@@ -50,38 +51,6 @@ void DFPeristalticPump::dose() {
 	pump.write(90);
 }
 
-/// @brief Runs the auto pump task
-/// @param elapsed The amount of time, in ms, since this was last called
-void DFPeristalticPump::runTask(long elapsed) {
-	totalElapsed += elapsed;
-	if (totalElapsed > TaskDescription.taskPeriod) {
-		totalElapsed = 0;
-		for (const auto& m : SensorManager::measurements) {
-			if (m.parameter == current_config.autoParameter) {
-				if (current_config.activeLow) {
-					if (m.value < current_config.threshold) {
-						dose();
-						return;
-					}
-				} else {
-					if (m.value > current_config.threshold) {
-						dose();
-						return;
-					}
-				}
-			}
-		}
-	}
-}
-
-/// @brief Enables the auto pump
-/// @param enable True to enable, false to disable 
-/// @return True on success
-bool DFPeristalticPump::enableAuto(bool enable) {
-	current_config.autoEnabled = enable;
-	return enableTask(enable);
-}
-
 /// @brief Gets the current config
 /// @return A JSON string of the config
 String DFPeristalticPump::getConfig() {
@@ -89,14 +58,8 @@ String DFPeristalticPump::getConfig() {
 	JsonDocument doc;
 	// Assign current values
 	doc["pumpSpeed"] = current_config.pumpSpeed;
-	doc["autoParameter"] = current_config.autoParameter;
 	doc["doseTime"] = current_config.doseTime;
-	doc["threshold"] = current_config.threshold;
 	doc["pin"] = current_config.pin;
-	doc["autoEnabled"] = current_config.autoEnabled;
-	doc["activeLow"] = current_config.activeLow;
-	doc["taskName"] = TaskDescription.taskName;
-	doc["taskPeriod"] = TaskDescription.taskPeriod;
 
 	// Create string to hold output
 	String output;
@@ -106,9 +69,10 @@ String DFPeristalticPump::getConfig() {
 }
 
 /// @brief Sets the configuration for this device
-/// @param config The JSON config to use
+/// @param config A JSON string of the configuration settings
+/// @param save If the configuration should be saved to a file
 /// @return True on success
-bool DFPeristalticPump::setConfig(String config) {
+bool DFPeristalticPump::setConfig(String config, bool save) {
 	// Allocate the JSON document
   	JsonDocument doc;
 	// Deserialize file contents
@@ -121,18 +85,12 @@ bool DFPeristalticPump::setConfig(String config) {
 	}
 	// Assign loaded values
 	current_config.pumpSpeed = doc["pumpSpeed"].as<int>();
-	current_config.autoParameter = doc["autoParameter"].as<String>();
 	current_config.doseTime = doc["doseTime"].as<int>();
-	current_config.threshold = doc["threshold"].as<int>();
 	current_config.pin = doc["pin"].as<int>();
-	current_config.autoEnabled = doc["autoEnabled"].as<bool>();
-	current_config.activeLow = doc["activeLow"].as<bool>();
-	TaskDescription.taskName = doc["taskName"].as<std::string>();
-	TaskDescription.taskPeriod = doc["taskPeriod"].as<long>();
 	pump.detach();
 	pump.attach(current_config.pin, 500, 2500);
-	if (!saveConfig(config_path, config)) {
-		return false;
+	if (save) {
+		return saveConfig(config_path, config);
 	}
-	return enableAuto(current_config.autoEnabled);
+	return true;
 }
