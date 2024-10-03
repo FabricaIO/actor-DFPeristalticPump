@@ -46,6 +46,7 @@ std::tuple<bool, String> DFPeristalticPump::receiveAction(int action, String pay
 
 /// @brief Activates the pump for the configured amount of time
 void DFPeristalticPump::dose() {
+	Serial.println("Dosing pump...");
 	pump.write(current_config.pumpSpeed);
 	delay(current_config.doseTime);
 	pump.write(90);
