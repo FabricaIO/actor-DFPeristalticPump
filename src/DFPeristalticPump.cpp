@@ -46,7 +46,7 @@ std::tuple<bool, String> DFPeristalticPump::receiveAction(int action, String pay
 
 /// @brief Activates the pump for the configured amount of time
 void DFPeristalticPump::dose() {
-	Serial.println("Dosing pump...");
+	Logger.println("Dosing pump...");
 	pump.write(current_config.pumpSpeed);
 	delay(current_config.doseTime);
 	pump.write(90);
@@ -80,8 +80,8 @@ bool DFPeristalticPump::setConfig(String config, bool save) {
 	DeserializationError error = deserializeJson(doc, config);
 	// Test if parsing succeeds.
 	if (error) {
-		Serial.print(F("Deserialization failed: "));
-		Serial.println(error.f_str());
+		Logger.print(F("Deserialization failed: "));
+		Logger.println(error.f_str());
 		return false;
 	}
 	// Assign loaded values
