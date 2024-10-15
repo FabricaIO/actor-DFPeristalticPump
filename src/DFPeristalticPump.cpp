@@ -4,7 +4,7 @@
 /// @param Pin The pin to use
 /// @param ConfigFile The file name to store settings in
 DFPeristalticPump::DFPeristalticPump(int Pin, String ConfigFile) {
-	config_path = "/settings/sig/" + ConfigFile;
+	config_path = "/settings/act/" + ConfigFile;
 	current_config.pin = Pin;
 	// Allow allocation of all timers
     ESP32PWM::allocateTimer(0);
