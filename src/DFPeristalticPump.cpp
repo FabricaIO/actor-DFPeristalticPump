@@ -21,7 +21,6 @@ bool DFPeristalticPump::begin() {
 	Description.type = "pump";
 	Description.name = "Peristaltic Pump";
 	Description.actions = {{"Dose", 0}};
-	Description.id = 3;
 	pump.setPeriodHertz(50);
 	bool result = false;
 	// Create settings directory if necessary
