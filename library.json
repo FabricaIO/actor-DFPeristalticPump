@@ -1,0 +1,49 @@
+{
+	"name": "Fabrica-IO Actor DF Peristaltic Pump",
+	"version": "0.5.0",
+	"description": "DF Robot multifunctional environmental sensor for Fabrica-IO",
+	"keywords": "Fabrica-IO, sensor, temperature, pressure, humidity, pressure, ambient light, uv",
+	"repository":
+	{
+	  "type": "git",
+	  "url": "https://github.com/FabricaIO/actor-DFPeristalticPump.git"
+	},
+	"authors":
+	[
+	  {
+		"name": "Sam Groveman",
+		"email": "SamGroveman@outlook.com",
+		"url": "https://github.com/FabricaIO"
+	  }
+	],
+	"dependencies": {
+		"ESP32Servo": "madhephaestus/ESP32Servo@^3.0.5"
+	  },
+	"license": "GPLv3",
+	"homepage": "https://github.com/FabricaIO",
+	"frameworks": "arduino",
+	"platforms": "*",
+	"fabrica-io" : {
+		"name": "Peristaltic Pump",
+		"type": 1,
+		"category": "Pump",
+		"libname": "DFPeristalticPump",
+		"includes": ["DFPeristalticPump"],
+		"description": "An easy tp control peristaltic pump",
+		"constructor":
+		[
+			{
+				"name": "Pin",
+				"type": "int",
+				"description": "The pin to use",
+				"default": ""
+			},
+			{
+				"name": "Configfile",
+				"type": "String",
+				"description": "The file name to store settings in",
+				"default": "DFPump.json"
+			}
+		]
+	}
+  }
