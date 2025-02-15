@@ -1,8 +1,8 @@
 {
-	"name": "Fabrica-IO Actor DF Peristaltic Pump",
+	"name": "Fabrica-IO Actor DF Robot Peristaltic Pump",
 	"version": "0.5.0",
-	"description": "DF Robot multifunctional environmental sensor for Fabrica-IO",
-	"keywords": "Fabrica-IO, sensor, temperature, pressure, humidity, pressure, ambient light, uv",
+	"description": "DF Robot peristaltic pump for precise dosing",
+	"keywords": "Fabrica-IO, actor, pump",
 	"repository":
 	{
 	  "type": "git",
@@ -24,26 +24,28 @@
 	"frameworks": "arduino",
 	"platforms": "*",
 	"fabrica-io" : {
-		"name": "Peristaltic Pump",
+		"name": "PeristalticPump",
 		"type": 1,
 		"category": "Pump",
 		"libname": "DFPeristalticPump",
 		"includes": ["DFPeristalticPump"],
-		"description": "An easy tp control peristaltic pump",
+		"description": "An easy to control peristaltic pump",
 		"constructor":
 		[
-			{
-				"name": "Pin",
-				"type": "int",
-				"description": "The pin to use",
-				"default": ""
-			},
-			{
-				"name": "Configfile",
-				"type": "String",
-				"description": "The file name to store settings in",
-				"default": "DFPump.json"
-			}
+			[
+				{
+					"name": "Pin",
+					"type": "int",
+					"description": "The pin to use",
+					"default": ""
+				},
+				{
+					"name": "Configfile",
+					"type": "String",
+					"description": "The file name to store settings in",
+					"default": "DFPump.json"
+				}
+			]
 		]
 	}
   }
