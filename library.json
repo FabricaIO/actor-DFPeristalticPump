@@ -1,5 +1,5 @@
 {
-	"name": "Fabrica-IO Actor DF Robot Peristaltic Pump",
+	"name": "actor-DFPeristalticPump",
 	"version": "0.5.0",
 	"description": "DF Robot peristaltic pump for precise dosing",
 	"keywords": "Fabrica-IO, actor, pump",
