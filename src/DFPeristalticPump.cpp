@@ -57,6 +57,7 @@ String DFPeristalticPump::getConfig() {
 	// Allocate the JSON document
 	JsonDocument doc;
 	// Assign current values
+	doc["Name"] = Description.name;
 	doc["pumpSpeed"] = current_config.pumpSpeed;
 	doc["doseTime"] = current_config.doseTime;
 	doc["pin"] = current_config.pin;
@@ -84,6 +85,7 @@ bool DFPeristalticPump::setConfig(String config, bool save) {
 		return false;
 	}
 	// Assign loaded values
+	Description.name = doc["Name"].as<String>();
 	current_config.pumpSpeed = doc["pumpSpeed"].as<int>();
 	current_config.doseTime = doc["doseTime"].as<int>();
 	current_config.pin = doc["pin"].as<int>();
