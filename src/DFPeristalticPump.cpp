@@ -1,9 +1,10 @@
 #include "DFPeristalticPump.h"
 
 /// @brief Creates a peristaltic pump object
+/// @param Name The device name
 /// @param Pin The pin to use
 /// @param ConfigFile The file name to store settings in
-DFPeristalticPump::DFPeristalticPump(int Pin, String ConfigFile) {
+DFPeristalticPump::DFPeristalticPump(String Name, int Pin, String ConfigFile) : Actor(Name) {
 	config_path = "/settings/act/" + ConfigFile;
 	current_config.pin = Pin;
 	// Allow allocation of all timers
@@ -19,7 +20,6 @@ bool DFPeristalticPump::begin() {
 	// Set description
 	Description.actionQuantity = 1;
 	Description.type = "pump";
-	Description.name = "Peristaltic Pump";
 	Description.actions = {{"Dose", 0}};
 	pump.setPeriodHertz(50);
 	bool result = false;

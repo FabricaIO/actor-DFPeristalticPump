@@ -42,7 +42,7 @@ class DFPeristalticPump : public Actor {
 
 		void dose();
 	public:
-		DFPeristalticPump(int Pin, String ConfigFile = "DFPump.json");
+		DFPeristalticPump(String Name, int Pin, String ConfigFile = "DFPump.json");
 		bool begin();
 		std::tuple<bool, String> receiveAction(int action, String payload = "");
 		String getConfig();
