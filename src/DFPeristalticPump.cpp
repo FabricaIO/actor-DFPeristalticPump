@@ -26,7 +26,7 @@ bool DFPeristalticPump::begin() {
 	// Create settings directory if necessary
 	if (!checkConfig(config_path)) {
 		// Set defaults
-		result = setConfig(R"({"pumpSpeed": 180, "doseTime": 2000, "pin":)" + String(current_config.pin) + "}", true);
+		result = setConfig(getConfig(), true);
 	} else {
 		// Load settings
 		result = setConfig(Storage::readFile(config_path), false);
